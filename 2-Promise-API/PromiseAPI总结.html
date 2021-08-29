@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+            1. Promise 构造函数: Promise (excutor) {}
+            excutor 函数: 同步执行 (resolve, reject) => {}
+            resolve 函数: 内部定义成功时我们调用的函数 value => {}
+            reject 函数: 内部定义失败时我们调用的函数 reason => {}
+            说明: excutor 会在 Promise 内部立即同步回调,异步操作在执行器中执行
+
+            2. Promise.prototype.then 方法: (onResolved, onRejected) => {}
+            onResolved 函数: 成功的回调函数 (value) => {}
+            onRejected 函数: 失败的回调函数 (reason) => {}
+            说明: 指定用于得到成功 value 的成功回调和用于得到失败 reason 的失败回调
+            返回一个新的 promise 对象
+
+            3. Promise.prototype.catch 方法: (onRejected) => {}
+            onRejected 函数: 失败的回调函数 (reason) => {}
+            说明: then()的语法糖, 相当于: then(undefined, onRejected)
+
+            4. Promise.resolve 方法: (value) => {}
+            value: 成功的数据或 promise 对象
+            说明: 返回一个成功/失败的 promise 对象
+
+            5. Promise.reject 方法: (reason) => {}
+            reason: 失败的原因
+            说明: 返回一个失败的 promise 对象
+
+            6. Promise.all 方法: (promises) => {}
+            promises: 包含 n 个 promise 的数组
+            说明: 返回一个新的 promise, 只有所有的 promise 都成功才成功, 只要有一
+            个失败了就直接失败
+
+            7. Promise.race 方法: (promises) => {}
+            promises: 包含 n 个 promise 的数组
+            说明: 返回一个新的 promise, 第一个完成的 promise 的结果状态就是最终的
+            结果状态
+            */
+        /*
+        new Promise((resolve, reject) => {
+        if (Date.now()%2===0) {
+        resolve(1)
+        } else {
+        reject(2)
+        }
+        }).then(value => {
+        console.log('onResolved1()', value)
+        }).catch(reason => {
+            console.log('onRejected1()', reason)
+})
+*/
+        const p1 = Promise.resolve(1)
+        const p2 = Promise.resolve(Promise.resolve(3))
+        const p3 = Promise.resolve(Promise.reject(5))
+        const p4 = Promise.reject(7)
+        const p5 = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if (Date.now() % 2 === 0) {
+                    resolve(1)
+                } else {
+                    reject(2)
+                }
+            }, 100);
+        })
+        p3.catch(reason => {
+            // 没有捕获处理，会报错报错了
+            console.log(reason);
+        })
+        const pAll = Promise.all([p1, p2, p5])
+        pAll.then(
+            values => { console.log('all 成功了', values) },
+            reason => { console.log('all 失败了', reason) }
+        )
+        const pRace = Promise.race([p5, p4, p1])
+        const pRace1 = Promise.race([p5, p1, p4])
+        pRace.then(
+            value => { console.log('race 成功了', value) },
+            reason => { console.log('race 失败了', reason) }
+        )
+        pRace1.then(
+            value => { console.log('race 成功了', value) },
+            reason => { console.log('race 失败了', reason) }
+        )
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise API - reject</title>
+</head>
+
+<body>
+    <!-- <script>
+        // let p = Promise.reject(521);
+        // let p2 = Promise.reject('iloveyou');
+        let p3 = Promise.reject(new Promise((resolve, reject) => {
+            resolve('OK');
+        }));
+
+        console.log(p3);
+    </script> -->
+    <script>
+        const p1 = Promise.resolve(1)
+        const p2 = Promise.resolve(2)
+        const p3 = Promise.reject(3)
+
+        const pAll = Promise.all([p1, p2, p3])
+        const pAll2 = Promise.all([p1, p2])
+        //因为其中p3是失败所以pAll失败
+        pAll.then(
+            value => {
+                console.log('all onResolved()', value)
+            },
+            reason => {
+                console.log('all onRejected():', reason)
+            }
+        )
+        // all onRejected() 3
+        pAll2.then(
+            values => {
+                console.log('all onResolved():', values)
+            },
+            reason => {
+                console.log('all onRejected()', reason)
+            }
+        )
+        // all onResolved() [1, 2]
+
+    </script>
+
+</body>
+
+</html>
